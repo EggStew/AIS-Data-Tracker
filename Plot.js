@@ -1,4 +1,4 @@
-d3.csv('REM Supplier.csv', function(err, rows){
+d3.csv('WINDCAT 37.csv', function(err, rows){
     function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });}
 
@@ -7,7 +7,7 @@ d3.csv('REM Supplier.csv', function(err, rows){
     var Longitude = unpack(rows, 'Longnitude');
     var Latitude = unpack(rows, 'Latitude');
 
-    for ( var i = 1 ; i < ShipId.length; i++ ) {
+    for ( var i = 0 ; i < ShipId.length; i++ ) {
         var result = {
             type: 'scattergeo',
             location: 'united kingdom',
