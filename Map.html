@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIS_Map</title>
+
+    
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+<body>
+    
+    <div id='map' style='width: 800px; height: 600px;'></div>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZWdnc3RldyIsImEiOiJjbGRhZTE3b2wwaTU2M3BsaWxrcXF0YXFsIn0.G0vx0X-U51Si3qjDHAxSyg';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v12', // style URL
+        center: [-1.4, 57.2], // starting position [lng, lat]
+        zoom: 7, // starting zoom
+    });
+    </script>
+</body>
+</html>
+<!---->
