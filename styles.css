@@ -1,0 +1,60 @@
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+    .overlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    .slider {
+        width: 100%;
+    }
+
+    .overlay button {
+        font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #3386c0;
+        color: #fff;
+        display: inline-block;
+        margin: 0;
+        margin-bottom: 10px;
+        margin-top: -10px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .overlay button:hover {
+        background-color: #4ea0da;
+    }
+
+    #info {
+        display: table;
+        position: relative;
+        margin: 0px auto;
+        word-wrap: anywhere;
+        white-space: pre-wrap;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #222;
+        background: none;
+    }
+
+    .mapboxgl-popup {
+        max-width: 200px;
+    }
+
+    #key {
+        position: absolute;
+        background: none;
+        padding: 20px;
+        margin: 20px;
+        font-family: 'Open Sans', sans-serif;
+        max-width: 400px;
+        top: -20px;
+        right: 10px;
+    }

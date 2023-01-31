@@ -1,62 +1,45 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>AIS_Vessel_Tracker</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
-<style>
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-</style>
+
+    <meta charset="utf-8">
+    <title>AIS_Vessel_Tracker</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+    <script src="https://kit.fontawesome.com/1d3a636e33.js" crossorigin="anonymous"></script>
+
 </head>
+
 <body>
-<style>
-    .overlay {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-    }
-
-    .overlay button {
-        font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        background-color: #3386c0;
-        color: #fff;
-        display: inline-block;
-        margin: 0;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        border-radius: 3px;
-    }
-
-    .overlay button:hover {
-        background-color: #4ea0da;
-    }
-
-    #info {
-        display: table;
-        position: relative;
-        margin: 0px auto;
-        word-wrap: anywhere;
-        white-space: pre-wrap;
-        padding: 10px;
-        border: none;
-        border-radius: 3px;
-        font-size: 12px;
-        text-align: center;
-        color: #222;
-        background: none;
-    }
-</style>
 
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+
 
 <div id="map"></div>
 <pre id="info"></pre>
 <div class="overlay">
-    <button id="replay">Replay</button>
+    <h2>WindCat 37: <label id='time'>Time/Date</label></h2>
+    <button id="replay"></i><i class="fa-solid fa-play"></i> Play</button>
+    <button id="pause"><i class="fa-solid fa-pause"></i> Pause</button>
+    <input id='my-slider' class='my-slider' type='range' min='0' max='1' step='0.001' value='0' />
+</div>
+
+<div id="key" class="key">
+    <div><h2>Aberdeen Offshore Wind Farm:</h2>
+    </div>
+    <div>
+        <i class="fa-sharp fa-solid fa-location-dot"></i>Turbine
+    </div>
+    <div>
+        <i class="fa-sharp fa-solid fa-dash"></i>License Area
+    </div>
+    <div>
+        <i class="fa-solid fa-ship"></i>Vessel
+    </div>
 </div>
 
 <script>
@@ -65,8 +48,8 @@ body { margin: 0; padding: 0; }
         container: 'map',
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio,
         style: 'mapbox://styles/mapbox/streets-v12',
-        center: [-1.4, 57.2], // starting position [lng, lat]
-        zoom: 7, // starting zoom
+        center: [-1.9, 57.2], // starting position [lng, lat]
+        zoom: 10, // starting zoom
     });
 
     //Displays the Lat and Long of the Current Cursors Location 
@@ -75,52 +58,11 @@ body { margin: 0; padding: 0; }
         // `e.lngLat` is the longitude, latitude geographical position of the event.
         JSON.stringify(e.lngLat.wrap());
     });
+</script>
 
-    // Create a Marker for each Turbine, 11 Total.
-        const marker1 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-2.012619, 57.223689])
-        .addTo(map);
+<script src="turbine_markers.js"></script>
 
-        const marker2 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-2.002188, 57.228391])
-        .addTo(map);
-
-        const marker3 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-1.989502, 57.233520])
-        .addTo(map);
-
-        const marker4 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-1.975843, 57.240101])
-        .addTo(map);
-
-        const marker5 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([ -2.011176,  57.215820])
-        .addTo(map);
-
-        const marker6 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-2.000215, 57.220070])
-        .addTo(map);
-
-        const marker7 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-1.987889, 57.224430])
-        .addTo(map);
-
-        const marker8 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-1.974161, 57.230164])
-        .addTo(map);
-
-        const marker9 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-2.010441, 57.207956])
-        .addTo(map);
-
-        const marker10 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-1.998675, 57.211752])
-        .addTo(map);
-
-        const marker11 = new mapboxgl.Marker({ color: 'red'})
-        .setLngLat([-1.985834, 57.216024])
-        .addTo(map);
-
+<script>
     // A simple line from origin to destination.
     const route = {
         'type': 'FeatureCollection',
@@ -222,6 +164,8 @@ body { margin: 0; padding: 0; }
         ]
     };
 
+    //Four connecting lines representing the license area
+
     const area = {
         'type': 'FeatureCollection',
         'features': [
@@ -278,6 +222,8 @@ body { margin: 0; padding: 0; }
 
     // Used to increment the value of the point measurement against the route.
     let counter = 0;
+
+    let pause = false;
 
     map.on('load', () => {
         // Add a source and layer displaying a point which will be animated in a circle.
@@ -337,15 +283,23 @@ body { margin: 0; padding: 0; }
         });
 
         function animate() {
+            
+            if (pause){
+                counter = counter - 1;
+                return;
+            }
             const start =
                 route.features[0].geometry.coordinates[
                     counter >= steps ? counter - 1 : counter
                 ];
+                //console.log(route.features[0].geometry.coordinates.length)
             const end =
                 route.features[0].geometry.coordinates[
                     counter >= steps ? counter : counter + 1
                 ];
             if (!start || !end) return;
+            
+            console.log(counter);
 
             // Update point geometry to a new position based on counter denoting
             // the index to access the arc
@@ -365,13 +319,50 @@ body { margin: 0; padding: 0; }
 
             // Request the next frame of animation as long as the end has not been reached
             if (counter < steps) {
+                
                 requestAnimationFrame(animate);
             }
 
             counter = counter + 1;
         }
 
+        function updatePoint() {
+            
+            const start =
+                route.features[0].geometry.coordinates[
+                    counter >= steps ? counter - 1 : counter
+                ];
+                //console.log(route.features[0].geometry.coordinates.length)
+            const end =
+                route.features[0].geometry.coordinates[
+                    counter >= steps ? counter : counter + 1
+                ];
+            if (!start || !end) return;
+            
+            console.log(counter);
+
+            // Update point geometry to a new position based on counter denoting
+            // the index to access the arc
+            point.features[0].geometry.coordinates =
+                route.features[0].geometry.coordinates[counter];
+
+            // Calculate the bearing to ensure the icon is rotated to match the route arc
+            // The bearing is calculated between the current point and the next point, except
+            // at the end of the arc, which uses the previous point and the current point
+            point.features[0].properties.bearing = turf.bearing(
+                turf.point(start),
+                turf.point(end)
+            );
+
+            // Update the source with this new data
+            map.getSource('point').setData(point);
+
+        }
+
         document.getElementById('replay').addEventListener('click', () => {
+
+            pause = false;
+
             // Set the coordinates of the original point back to origin
             point.features[0].geometry.coordinates = origin;
 
@@ -379,14 +370,39 @@ body { margin: 0; padding: 0; }
             map.getSource('point').setData(point);
 
             // Reset the counter
-            counter = 0;
+            //counter = 0;
+            
+            //counter = 3500;
 
             // Restart the animation
             animate(counter);
         });
 
+        document.getElementById('pause').addEventListener('click', () => {
+            pause = true;
+        });
+        
+        document.getElementById('my-slider').addEventListener('change', () => {
+            // Set the coordinates of the original point back to origin
+            point.features[0].geometry.coordinates = origin;
+
+            // Update the source layer
+            map.getSource('point').setData(point);
+
+            let slider = document.getElementById("my-slider").value;
+            console.log(steps*slider)
+
+            // Reset the counter
+            counter = steps*slider;
+            
+            //counter = 3500;
+
+            // Restart the animation
+            updatePoint(counter);
+        });
+
         // Start the animation
-        animate(counter);
+        //animate(counter);
     });
 </script>
 
