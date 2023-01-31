@@ -2,13 +2,26 @@
     #map { position: absolute; top: 0; bottom: 0; width: 100%; }
 
     .overlay {
-        position: absolute;
-        top: 10px;
+        background: white;
+        border-radius: 10px;
+        position: fixed;
+        left: 50%;
+        bottom: -20px;
+        transform: translate(-50%, -50%);
+        margin: 0 auto;
+        width: 500px
+            }
+
+    .my-slider {
+        width: 60%;
+        position: relative;
         left: 10px;
     }
 
-    .slider {
-        width: 100%;
+    .overlay h2{
+        font: 600 16px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        position: relative;
+        left: 10px;
     }
 
     .overlay button {
@@ -23,6 +36,8 @@
         border: none;
         cursor: pointer;
         border-radius: 3px;
+        position: relative;
+        left: 10px;
     }
 
     .overlay button:hover {
@@ -31,30 +46,43 @@
 
     #info {
         display: table;
-        position: relative;
+        position: absolute;
         margin: 0px auto;
         word-wrap: anywhere;
         white-space: pre-wrap;
-        padding: 10px;
+        padding: 10px 20px;
         border: none;
-        border-radius: 3px;
-        font-size: 12px;
+        border-radius: 10px;
+        font-size: 13px;
         text-align: center;
         color: #222;
-        background: none;
+        background: white;
+        top: 240px;
+        right: 30px;
     }
 
     .mapboxgl-popup {
         max-width: 200px;
     }
 
-    #key {
+    .key {
+        font: 600 16px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         position: absolute;
-        background: none;
-        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        padding: 10px 20px;
         margin: 20px;
-        font-family: 'Open Sans', sans-serif;
         max-width: 400px;
-        top: -20px;
+        top: -10px;
         right: 10px;
+    }
+
+    .key i {
+        color: rgb(228, 14, 14);
+    }
+    #vessel{
+        color: #3386c0;
+    }
+    #vessel-path{
+        color: rgba(8, 69, 126, 0.884)
     }
