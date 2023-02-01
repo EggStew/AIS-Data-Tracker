@@ -10,7 +10,7 @@
         transform: translate(-50%, -50%);
         margin: 0 auto;
         width: 500px
-            }
+    }
 
     .my-slider {
         width: 60%;
@@ -27,6 +27,7 @@
 
     .overlay button {
         font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        text-align: center;
         background-color: #3386c0;
         color: #fff;
         display: inline-block;
@@ -38,13 +39,33 @@
         width: 10%;
         left: 40%;
         bottom: 20px;
+<<<<<<< HEAD
     }
 
     .overlay button #incre{
         width: 2%;
+=======
+>>>>>>> 354b6c5ec79ec0ae3ee6c6ea7c75d5e6f9bb59f9
     }
-
     .overlay button:hover {
+        background-color: #4ea0da;
+    }
+    .overlay button1 {
+        font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        text-align: center;
+        background-color: #3386c0;
+        color: #fff;
+        display: inline-block;
+        border: none;
+        cursor: pointer;
+        border-radius: 3px;
+        position: relative;
+        height: 10%;
+        width: 2%;
+        left: 40%;
+        bottom: 20px;
+    }
+    .overlay button1:hover {
         background-color: #4ea0da;
     }
 
