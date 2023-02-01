@@ -15,7 +15,8 @@
     .my-slider {
         width: 60%;
         position: relative;
-        left: 10px;
+        left: 50% / slider;
+        bottom: -8px;
     }
 
     .overlay h2{
@@ -29,15 +30,18 @@
         background-color: #3386c0;
         color: #fff;
         display: inline-block;
-        margin: 0;
-        margin-bottom: 10px;
-        margin-top: -10px;
-        padding: 10px 20px;
         border: none;
         cursor: pointer;
         border-radius: 3px;
         position: relative;
-        left: 10px;
+        height: 10%;
+        width: 10%;
+        left: 40%;
+        bottom: 20px;
+    }
+
+    .overlay button #incre{
+        width: 2%;
     }
 
     .overlay button:hover {
