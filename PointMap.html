@@ -16,394 +16,468 @@
 
 <body>
 
-<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 
 
-<div id="map"></div>
-<pre id="info"></pre>
-<div class="overlay">
-    <h2>WindCat 37: <label id='time'>10:24-13:00 / 2023-01-24</label></h2>
-    <button id="play"></i><i class="fa-solid fa-play"></i> Play</button>
-    <button id="pause"><i class="fa-solid fa-pause"></i> Pause</button>
-    <input id='my-slider' class='my-slider' type='range' min='0' max='1' step='0.001' value='0' />
-</div>
-
-<div id="key" class="key">
-    <div><h2>Aberdeen Offshore Wind Farm:</h2>
+    <div id="map"></div>
+    <pre id="info"></pre>
+    <div class="overlay">
+        <h2>WindCat 37: <label id='time'>10:24-13:00 / 2023-01-24</label></h2>
+        <button1 id="previous"></i><i class="fa-solid fa-play"></i> Play</button1>
+        <button id="play-pause-replay"></i><i class="fa-solid fa-play"></i> Play</button>
+        <button1 id="next"></i><i class="fa-solid fa-play"></i> Play</button1>
+        <input id='my-slider' class='my-slider' type='range' min='0' max='1' step='0.001' value='0' />
     </div>
-    <div>
-        <p><i id = "turbine" class="fa-sharp fa-solid fa-location-dot"></i> Turbine</p>
-    </div>
-    <div>
-        <p><i id="license-area" class="fa-solid fa-minus"></i> License Area</p>
-    </div>
-    <div>
-        <p><i id="vessel-path" class="fa-solid fa-minus"></i> Vessel Path</p>
-    </div>
-    <div>
-        <p><i id = "vessel" class="fa-solid fa-ship"></i> Vessel</p>
-    </div>
-</div>
 
-<script>
-	mapboxgl.accessToken = 'pk.eyJ1IjoiZWdnc3RldyIsImEiOiJjbGRiaDZmM2cwMGszM3BtaXJhNnBydWNjIn0.QRI9ip6mRbZ97Dj0usCC-Q';
-    const map = new mapboxgl.Map({
-        container: 'map',
-        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center: [-1.9, 57.2], // starting position [lng, lat]
-        zoom: 10, // starting zoom
-    });
+    <div id="key" class="key">
+        <div>
+            <h2>Aberdeen Offshore Wind Farm:</h2>
+        </div>
+        <div>
+            <p><i id="turbine" class="fa-sharp fa-solid fa-location-dot"></i> Turbine</p>
+        </div>
+        <div>
+            <p><i id="license-area" class="fa-solid fa-minus"></i> License Area</p>
+        </div>
+        <div>
+            <p><i id="vessel-path" class="fa-solid fa-minus"></i> Vessel Path</p>
+        </div>
+        <div>
+            <p><i id="vessel" class="fa-solid fa-ship"></i> Vessel</p>
+        </div>
+    </div>
 
-    //Displays the Lat and Long of the Current Cursors Location 
-    map.on('mousemove', (e) => {
-        document.getElementById('info').innerHTML =
-        // `e.lngLat` is the longitude, latitude geographical position of the event.
-        JSON.stringify(e.lngLat.wrap());
-    });
-</script>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZWdnc3RldyIsImEiOiJjbGRiaDZmM2cwMGszM3BtaXJhNnBydWNjIn0.QRI9ip6mRbZ97Dj0usCC-Q';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            // Choose from Mapbox's core styles, or make your own style with Mapbox Studio,
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [-1.9, 57.2], // starting position [lng, lat]
+            zoom: 10, // starting zoom
+        });
 
-<script src="turbine_markers.js"></script>
+        //Displays the Lat and Long of the Current Cursors Location 
+        map.on('mousemove', (e) => {
+            document.getElementById('info').innerHTML =
+                // `e.lngLat` is the longitude, latitude geographical position of the event.
+                JSON.stringify(e.lngLat.wrap());
+        });
+    </script>
 
-<script>
-    // A simple line from origin to destination.
-    const route = {
-        'type': 'FeatureCollection',
-        'features': [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'LineString',
-                    'coordinates': [
-                        [-2.0813979713171875, 57.143901362708675],
-                        [-2.076046979216926, 57.14280909910059],
-                        [-2.07236486088982, 57.141371861022634],
-                        [-2.0683118817253217, 57.14186052823189],
-                        [-2.058298639082068, 57.14565466582255],
-                        [-2.057206482010315, 57.148974835207554],
-                        [-2.0346718767641505, 57.20071671259976],
-                        [-2.011015768757261, 57.20780740225223],
-                        [-2.010421594269701, 57.207669487220926],
-                        [-2.0099218654481774, 57.207883487766196],
-                        [-2.0099417797307524, 57.20796977108196],
-                        [-2.0104197225138023, 57.208217834491705],
-                        [-2.0108180081667797, 57.20812076639959],
-                        [-2.0108180081667797, 57.20812076639959],
-                        [-2.010421594269701, 57.207669487220926],
-                        [-2.0099218654481774, 57.207883487766196],
-                        [-2.0099417797307524, 57.20796977108196],
-                        [-2.0104197225138023, 57.208217834491705],
-                        [-2.0108180081667797, 57.20812076639959],
-                        [-2.0108180081667797, 57.20812076639959],
-                        //Turbine 2
-                        [-1.9992867095704696, 57.211568444203124],
-                        [-1.9992453127094905, 57.211871085869944],
-                        [-1.998976233114716, 57.212039219056976],
-                        [-1.9985829629380305, 57.212028010201635],
-                        [-1.9983552802032136, 57.21196075699814],
-                        [-1.9982103911910372, 57.21175899665273],
-                        [-1.9986036613676106, 57.211635698121086],
-                        [-1.9990797252668244, 57.211635698121086],
-                        [-1.9992867095704696, 57.211568444203124],
-                        [-1.9992453127094905, 57.211871085869944],
-                        [-1.998976233114716, 57.212039219056976],
-                        [-1.9985829629380305, 57.212028010201635],
-                        [-1.9983552802032136, 57.21196075699814],
-                        [-1.9982103911910372, 57.21175899665273],
-                        [-1.9986036613676106, 57.211635698121086],
-                        [-1.9990797252668244, 57.211635698121086],
-                        [-1.9992867095704696, 57.211568444203124],
-                        [-1.9992453127094905, 57.211871085869944],
-                        [-1.998976233114716, 57.212039219056976],
-                        [-1.9985829629380305, 57.212028010201635],
-                        [-1.9983552802032136, 57.21196075699814],
-                        [-1.9982103911910372, 57.21175899665273],
-                        [-1.9986036613676106, 57.211635698121086],
-                        [-1.9990797252668244, 57.211635698121086],
-                        [-1.9987149597861844, 57.21205740942011],
-                        [-1.9930490816122983, 57.218468201555766],
-                        [-1.9940817139663523, 57.227897244568794],
-                        [-1.9821720208170746, 57.22998397973748],
-                        //Repeat Turbine 3
-                        [-1.97549433159395, 57.23046838351715],
-                        [-1.974703113877922, 57.23056624848158],
-                        [-1.9742102120958407, 57.23052178380931],
-                        [-1.9737720771784097, 57.230462497495864],
-                        [-1.9735530097203764, 57.230180886206455],
-                        [-1.9735256262879375, 57.229988203558946],
-                        [-1.9740459115014346, 57.229914094580096],
-                        [-1.9747304973102473, 57.22994373818949],
-                        [-1.9748674144711913, 57.230225351289675],
-                        [-1.97549433159395, 57.23046838351715],
-                        [-1.974703113877922, 57.23056624848158],
-                        [-1.9742102120958407, 57.23052178380931],
-                        [-1.9737720771784097, 57.230462497495864],
-                        [-1.9735530097203764, 57.230180886206455],
-                        [-1.9735256262879375, 57.229988203558946],
-                        [-1.9740459115014346, 57.229914094580096],
-                        [-1.9747304973102473, 57.22994373818949],
-                        [-1.9748674144711913, 57.230225351289675],
-                        [-1.97549433159395, 57.23046838351715],
-                        [-1.974703113877922, 57.23056624848158],
-                        [-1.9742102120958407, 57.23052178380931],
-                        [-1.9737720771784097, 57.230462497495864],
-                        [-1.9735530097203764, 57.230180886206455],
-                        [-1.9735256262879375, 57.229988203558946],
-                        [-1.9740459115014346, 57.229914094580096],
-                        [-1.9747304973102473, 57.22994373818949],
-                        [-1.9748674144711913, 57.230225351289675],
-                        [-1.9799847833033937, 57.22210599565173],
-                        [-1.980937568173431, 57.20654207292293],
-                        [-2.0400236420257443, 57.199197179438414],
-                        [-2.058990114272774, 57.14558931197118],
-                        [-2.0683118817253217, 57.14186052823189],
-                        [-2.07236486088982, 57.141371861022634],
-                        [-2.076046979216926, 57.14280909910059],
-                        [-2.0813979713171875, 57.143901362708675]                      
-                        
-                    ]
+    <script src="turbine_markers.js"></script>
+
+    <script>
+        // A simple line from origin to destination.
+        const route = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [
+                            [-2.0813979713171875, 57.143901362708675],
+                            [-2.076046979216926, 57.14280909910059],
+                            [-2.07236486088982, 57.141371861022634],
+                            [-2.0683118817253217, 57.14186052823189],
+                            [-2.058298639082068, 57.14565466582255],
+                            [-2.057206482010315, 57.148974835207554],
+                            [-2.0346718767641505, 57.20071671259976],
+                            [-2.011015768757261, 57.20780740225223],
+                            [-2.010421594269701, 57.207669487220926],
+                            [-2.0099218654481774, 57.207883487766196],
+                            [-2.0099417797307524, 57.20796977108196],
+                            [-2.0104197225138023, 57.208217834491705],
+                            [-2.0108180081667797, 57.20812076639959],
+                            [-2.0108180081667797, 57.20812076639959],
+                            [-2.010421594269701, 57.207669487220926],
+                            [-2.0099218654481774, 57.207883487766196],
+                            [-2.0099417797307524, 57.20796977108196],
+                            [-2.0104197225138023, 57.208217834491705],
+                            [-2.0108180081667797, 57.20812076639959],
+                            [-2.0108180081667797, 57.20812076639959],
+                            //Turbine 2
+                            [-1.9992867095704696, 57.211568444203124],
+                            [-1.9992453127094905, 57.211871085869944],
+                            [-1.998976233114716, 57.212039219056976],
+                            [-1.9985829629380305, 57.212028010201635],
+                            [-1.9983552802032136, 57.21196075699814],
+                            [-1.9982103911910372, 57.21175899665273],
+                            [-1.9986036613676106, 57.211635698121086],
+                            [-1.9990797252668244, 57.211635698121086],
+                            [-1.9992867095704696, 57.211568444203124],
+                            [-1.9992453127094905, 57.211871085869944],
+                            [-1.998976233114716, 57.212039219056976],
+                            [-1.9985829629380305, 57.212028010201635],
+                            [-1.9983552802032136, 57.21196075699814],
+                            [-1.9982103911910372, 57.21175899665273],
+                            [-1.9986036613676106, 57.211635698121086],
+                            [-1.9990797252668244, 57.211635698121086],
+                            [-1.9992867095704696, 57.211568444203124],
+                            [-1.9992453127094905, 57.211871085869944],
+                            [-1.998976233114716, 57.212039219056976],
+                            [-1.9985829629380305, 57.212028010201635],
+                            [-1.9983552802032136, 57.21196075699814],
+                            [-1.9982103911910372, 57.21175899665273],
+                            [-1.9986036613676106, 57.211635698121086],
+                            [-1.9990797252668244, 57.211635698121086],
+                            [-1.9987149597861844, 57.21205740942011],
+                            [-1.9930490816122983, 57.218468201555766],
+                            [-1.9940817139663523, 57.227897244568794],
+                            [-1.9821720208170746, 57.22998397973748],
+                            //Repeat Turbine 3
+                            [-1.97549433159395, 57.23046838351715],
+                            [-1.974703113877922, 57.23056624848158],
+                            [-1.9742102120958407, 57.23052178380931],
+                            [-1.9737720771784097, 57.230462497495864],
+                            [-1.9735530097203764, 57.230180886206455],
+                            [-1.9735256262879375, 57.229988203558946],
+                            [-1.9740459115014346, 57.229914094580096],
+                            [-1.9747304973102473, 57.22994373818949],
+                            [-1.9748674144711913, 57.230225351289675],
+                            [-1.97549433159395, 57.23046838351715],
+                            [-1.974703113877922, 57.23056624848158],
+                            [-1.9742102120958407, 57.23052178380931],
+                            [-1.9737720771784097, 57.230462497495864],
+                            [-1.9735530097203764, 57.230180886206455],
+                            [-1.9735256262879375, 57.229988203558946],
+                            [-1.9740459115014346, 57.229914094580096],
+                            [-1.9747304973102473, 57.22994373818949],
+                            [-1.9748674144711913, 57.230225351289675],
+                            [-1.97549433159395, 57.23046838351715],
+                            [-1.974703113877922, 57.23056624848158],
+                            [-1.9742102120958407, 57.23052178380931],
+                            [-1.9737720771784097, 57.230462497495864],
+                            [-1.9735530097203764, 57.230180886206455],
+                            [-1.9735256262879375, 57.229988203558946],
+                            [-1.9740459115014346, 57.229914094580096],
+                            [-1.9747304973102473, 57.22994373818949],
+                            [-1.9748674144711913, 57.230225351289675],
+                            [-1.9799847833033937, 57.22210599565173],
+                            [-1.980937568173431, 57.20654207292293],
+                            [-2.0400236420257443, 57.199197179438414],
+                            [-2.058990114272774, 57.14558931197118],
+                            [-2.0683118817253217, 57.14186052823189],
+                            [-2.07236486088982, 57.141371861022634],
+                            [-2.076046979216926, 57.14280909910059],
+                            [-2.0813979713171875, 57.143901362708675]
+
+                        ]
+                    }
                 }
-            }
-        ]
-    };
-
-    //Four connecting lines representing the license area
-
-    const area = {
-        'type': 'FeatureCollection',
-        'features': [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'LineString',
-                    'coordinates': [
-                        [-2.0436518618214445, 57.197592996608314],
-                        [-2.013638402871243, 57.245660124945296],
-                        [-1.9463436518618213, 57.2539022880744],
-                        [-1.976491700314042, 57.20605397822757],
-                        [-2.0436518618214445, 57.197592996608314]
-                    ]
+            ]
+        };
+        //Four connecting lines representing the license area
+        const area = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [
+                            [-2.0436518618214445, 57.197592996608314],
+                            [-2.013638402871243, 57.245660124945296],
+                            [-1.9463436518618213, 57.2539022880744],
+                            [-1.976491700314042, 57.20605397822757],
+                            [-2.0436518618214445, 57.197592996608314]
+                        ]
+                    }
                 }
-            }
-        ]
-    };
-
-    // A single point that animates along the route.
-    // Coordinates are initially set to origin.
-    const point = {
-        'type': 'FeatureCollection',
-        'features': [
-            {
-                'type': 'Feature',
-                'properties': {},
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': origin
+            ]
+        };
+        // A single point that animates along the route.
+        // Coordinates are initially set to origin.
+        const point = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': origin
+                    }
                 }
+            ]
+        };
+        // Calculate the distance in kilometers between route start/end point.
+        const lineDistance = turf.length(route.features[0]);
+        const arc = [];
+        // Number of steps to use in the arc and animation, more steps means
+        // a smoother arc and animation, but too many steps will result in a
+        // low frame rate
+        const steps = 4000;
+        // Draw an arc between the `origin` & `destination` of the two points
+        for (let i = 0; i < lineDistance; i += lineDistance / steps) {
+            const segment = turf.along(route.features[0], i);
+            arc.push(segment.geometry.coordinates);
+        }
+        // Update the route with calculated arc coordinates
+        route.features[0].geometry.coordinates = arc;
+        // Used to increment the value of the point measurement against the route.
+
+        map.on('load', () => {
+            // Add a source and layer displaying a point which will be animated in a circle.
+
+            map.addSource('route', {
+                'type': 'geojson',
+                'data': route
+            });
+
+            map.addSource('area', {
+                'type': 'geojson',
+                'data': area
+            });
+
+            map.addSource('point', {
+                'type': 'geojson',
+                'data': point
+            });
+
+            map.addLayer({
+                'id': 'route',
+                'source': 'route',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': '#007cbf'
+                }
+            });
+
+            map.addLayer({
+                'id': 'area',
+                'source': 'area',
+                'type': 'line',
+                'paint': {
+                    'line-width': 2,
+                    'line-color': 'red'
+                }
+            });
+
+            map.addLayer({
+                'id': 'point',
+                'source': 'point',
+                'type': 'symbol',
+                'layout': {
+                    // This icon is a part of the Mapbox Streets style.
+                    // To view all images available in a Mapbox style, open
+                    // the style in Mapbox Studio and click the "Images" tab.
+                    // To add a new image to the style at runtime see
+                    // https://docs.mapbox.com/mapbox-gl-js/example/add-image/
+                    'icon-image': 'ferry',
+                    'icon-size': 1,
+                    'icon-rotate': ['get', 'bearing'],
+                    'icon-rotation-alignment': 'map',
+                    'icon-allow-overlap': true,
+                    'icon-ignore-placement': true
+                }
+            });
+
+            const ANIMATION_STATES = {
+                PLAYING: 'Playing',
+                PAUSED: 'Paused',
+                REPLAY: 'Replay'
+            };
+
+            let animState = ANIMATION_STATES.PAUSED;
+            let counter = 0;
+            let pause = false;
+
+            var slider = document.getElementById('my-slider');
+            var buttonPlay = document.getElementById('play-pause-replay');
+            var buttonNext = document.getElementById('next');
+            var buttonPrev = document.getElementById('previous');
+
+            buttonNext.innerText = '+';
+            buttonPrev.innerText = '-';
+            var isSliding = false;
+
+            slider.value = counter / steps;
+
+            //Update initial button state(the name of the button really)
+            UpdateAnimState(false, false);
+            //Call animate once, to get the boat drawn aat first position
+            Animate(true);
+
+            //Setting Button and Slider Listeners 
+            buttonPlay.addEventListener('click', () => {
+                UpdateAnimState(false, true);
+            });
+            buttonNext.addEventListener('click', () => {
+                Increment_Counter(1);
+            });
+            buttonPrev.addEventListener('click', () => {
+                Increment_Counter(-1);
+            });
+            slider.oninput = function () {
+                if (animState === ANIMATION_STATES.REPLAY) {
+                    animState = ANIMATION_STATES.PAUSED;
+                    UpdateAnimState(false, false);
+                }
+                isSliding = true;
+                counter = steps * this.value;
+                Animate(true);
             }
-        ]
-    };
-
-    // Calculate the distance in kilometers between route start/end point.
-    const lineDistance = turf.length(route.features[0]);
-
-    const arc = [];
-
-    // Number of steps to use in the arc and animation, more steps means
-    // a smoother arc and animation, but too many steps will result in a
-    // low frame rate
-    const steps = 4000;
-
-    // Draw an arc between the `origin` & `destination` of the two points
-    for (let i = 0; i < lineDistance; i += lineDistance / steps) {
-        const segment = turf.along(route.features[0], i);
-        arc.push(segment.geometry.coordinates);
-    }
-
-    // Update the route with calculated arc coordinates
-    route.features[0].geometry.coordinates = arc;
-
-    // Used to increment the value of the point measurement against the route.
-    let counter = 0;
-
-    let pause = false;
-
-    map.on('load', () => {
-        // Add a source and layer displaying a point which will be animated in a circle.
-        
-        map.addSource('route', {
-            'type': 'geojson',
-            'data': route
-        });
-
-        map.addSource('area', {
-            'type': 'geojson',
-            'data': area
-        });
-
-        map.addSource('point', {
-            'type': 'geojson',
-            'data': point
-        });
-
-        map.addLayer({
-            'id': 'route',
-            'source': 'route',
-            'type': 'line',
-            'paint': {
-                'line-width': 2,
-                'line-color': '#007cbf'
-            }
-        });
-
-        map.addLayer({
-            'id': 'area',
-            'source': 'area',
-            'type': 'line',
-            'paint': {
-                'line-width': 2,
-                'line-color': 'red'
-            }
-        });
-
-        map.addLayer({
-            'id': 'point',
-            'source': 'point',
-            'type': 'symbol',
-            'layout': {
-                // This icon is a part of the Mapbox Streets style.
-                // To view all images available in a Mapbox style, open
-                // the style in Mapbox Studio and click the "Images" tab.
-                // To add a new image to the style at runtime see
-                // https://docs.mapbox.com/mapbox-gl-js/example/add-image/
-                'icon-image': 'ferry',
-                'icon-size': 1,
-                'icon-rotate': ['get', 'bearing'],
-                'icon-rotation-alignment': 'map',
-                'icon-allow-overlap': true,
-                'icon-ignore-placement': true
-            }
-        });
-
-        function animate() {
-            
-            if (pause){
-                counter = counter - 1;
-                return;
-            }
-            const start =
-                route.features[0].geometry.coordinates[
+            slider.addEventListener('mouseup', function () {
+                isSliding = false;
+                Animate(false);
+            });
+            //Animation loop, if parameter is true it will only run once
+            function Animate(UpdateOnce) {
+                //Checking if the counter is at the last coordinate
+                if (counter >= steps - 1) {
+                    //Correction of the last coordinate
+                    UpdateFinalPositionCorrection();
+                    //Updating the State to Replay
+                    UpdateAnimState(true, false);
+                    return;
+                }
+                const start =
+                    route.features[0].geometry.coordinates[
                     counter >= steps ? counter - 1 : counter
-                ];
-                //console.log(route.features[0].geometry.coordinates.length)
-            const end =
-                route.features[0].geometry.coordinates[
+                    ];
+                const end =
+                    route.features[0].geometry.coordinates[
                     counter >= steps ? counter : counter + 1
-                ];
-            if (!start || !end) return;
-            
-            console.log(counter);
+                    ];
+                if (!start || !end) {
+                    return;
+                }
+                // Update point geometry to a new position based on counter denoting
+                // the index to access the arc
+                point.features[0].geometry.coordinates =
+                    route.features[0].geometry.coordinates[counter];
 
-            // Update point geometry to a new position based on counter denoting
-            // the index to access the arc
-            point.features[0].geometry.coordinates =
-                route.features[0].geometry.coordinates[counter];
-
-            // Calculate the bearing to ensure the icon is rotated to match the route arc
-            // The bearing is calculated between the current point and the next point, except
-            // at the end of the arc, which uses the previous point and the current point
-            point.features[0].properties.bearing = turf.bearing(
-                turf.point(start),
-                turf.point(end)
-            );
-
-            // Update the source with this new data
-            map.getSource('point').setData(point);
-
-            // Request the next frame of animation as long as the end has not been reached
-            if (counter < steps) {
-                
-                requestAnimationFrame(animate);
+                // Calculate the bearing to ensure the icon is rotated to match the route arc
+                // The bearing is calculated between the current point and the next point, except
+                // at the end of the arc, which uses the previous point and the current point
+                point.features[0].properties.bearing = turf.bearing(
+                    turf.point(start),
+                    turf.point(end)
+                );
+                // Update the source with this new data
+                map.getSource('point').setData(point);
+                // Request the next frame of animation as long as the end has not been reached
+                if (UpdateOnce === true) return; //If parameter is true then it wont run past this and loop the function
+                if (animState === ANIMATION_STATES.PAUSED || isSliding) return; //if holding slider or animation state is paused then it wont run the loop
+                if (counter < steps) {
+                    requestAnimationFrame(Animate);
+                }
+                counter = counter + 1;
+                UpdateSlider(); //Function that adjust the slider depending on the counter
             }
+            //Function that corrects the final coordinate and drawing of vessel
+            function UpdateFinalPositionCorrection() {
+                counter = steps - 1;
+                UpdateSlider();
 
-            counter = counter + 1;
-            updateSlider(counter)
-        }
+                const start =
+                    route.features[0].geometry.coordinates[counter - 1];
+                const end =
+                    route.features[0].geometry.coordinates[counter];
 
-        function updateSlider(counter) {
-            document.getElementById("my-slider").value = counter/steps;
-        }
+                point.features[0].geometry.coordinates =
+                    route.features[0].geometry.coordinates[counter];
 
-        function updatePoint() {
-            
-            const start =
-                route.features[0].geometry.coordinates[
-                    counter >= steps ? counter - 1 : counter
-                ];
-                //console.log(route.features[0].geometry.coordinates.length)
-            const end =
-                route.features[0].geometry.coordinates[
-                    counter >= steps ? counter : counter + 1
-                ];
-            if (!start || !end) return;
-            
-            console.log(counter);
+                point.features[0].properties.bearing = turf.bearing(
+                    turf.point(start),
+                    turf.point(end)
+                );
 
-            // Update point geometry to a new position based on counter denoting
-            // the index to access the arc
-            point.features[0].geometry.coordinates =
-                route.features[0].geometry.coordinates[counter];
+                map.getSource('point').setData(point);
+            }
+            //Increment counter either up or down depending if paraameter is -1 or 1 
+            function Increment_Counter(value) {
+                if (value === 1) {
+                    if (!CheckIfInBounds(value)) return; //Safety, check if counter is not > or < then min and max
 
-            // Calculate the bearing to ensure the icon is rotated to match the route arc
-            // The bearing is calculated between the current point and the next point, except
-            // at the end of the arc, which uses the previous point and the current point
-            point.features[0].properties.bearing = turf.bearing(
-                turf.point(start),
-                turf.point(end)
-            );
+                    animState = ANIMATION_STATES.PAUSED;
+                    UpdateAnimState(false, false);
+                    counter = counter + 1;
+                    UpdateSlider();
+                    Animate(true);
+                }
+                else if (value === -1) {
+                    if (!CheckIfInBounds(value)) return;
 
-            // Update the source with this new data
-            map.getSource('point').setData(point);
+                    animState = ANIMATION_STATES.PAUSED;
+                    UpdateAnimState(false, false);
+                    counter = counter - 1;
+                    UpdateSlider();
+                    Animate(true);
+                }
+            }
+            //This is called when play/pause/replay is pressed and switches states depending on what button pressed, this is basically a switch
+            function UpdateAnimState(animFinished, change) {
+                if (animFinished === true) {
+                    onAnimationLastFrame();
+                    return;
+                }
+                if (change) {
+                    if (animState === ANIMATION_STATES.PAUSED) {
+                        onPlay();
+                        return;
+                    }
+                    if (animState === ANIMATION_STATES.PLAYING) {
+                        onPause();
+                        return;
+                    }
+                    if (animState === ANIMATION_STATES.REPLAY) {
+                        onReplay()
+                        return;
+                    }
+                }
+                else {
+                    if (animState === ANIMATION_STATES.PAUSED) {
+                        buttonPlay.innerText = ' Play ';
+                        return;
+                    }
+                    else if (animState === ANIMATION_STATES.PLAYING) {
+                        buttonPlay.innerText = 'Pause ';
+                        return;
+                    }
+                    else if (animState === ANIMATION_STATES.REPLAY) {
+                        buttonPlay.innerText = 'Replay';
+                        return;
+                    }
+                }
+            }
+            //Function onSomething; are simillar to events but are called from the switch, when you press play/pause/replay
+            function onPlay() {
+                animState = ANIMATION_STATES.PLAYING;
+                buttonPlay.innerText = 'Pause ';
 
-        }
+                Animate(false);
+            }
+            function onPause() {
+                animState = ANIMATION_STATES.PAUSED;
+                buttonPlay.innerText = ' Play ';
+            }
+            function onReplay() {
+                animState = ANIMATION_STATES.PLAYING;
+                buttonPlay.innerText = 'Pause ';
 
-        document.getElementById('play').addEventListener('click', () => {
-
-            pause = false;
-
-            // Set the coordinates of the original point back to origin
-            point.features[0].geometry.coordinates = origin;
-
-            // Update the source layer
-            map.getSource('point').setData(point);
-
-            // Start the animation
-            animate(counter);
+                counter = 0;
+                Animate(false);
+            }
+            function onAnimationLastFrame() {
+                animState = ANIMATION_STATES.REPLAY;
+                buttonPlay.innerText = 'Replay';
+            }
+            //A function that returns a bool depending on, if incerementing the counter will throw an out of bounds error
+            function CheckIfInBounds(value) {
+                let value2 = (counter + value);
+                return value2 > steps || value2 < steps ? true : false;
+            }
+            //Cleaner code, we use this line alot so it makes sense to have it in a function
+            function UpdateSlider() {
+                slider.value = counter / steps;
+            }
         });
-
-        document.getElementById('pause').addEventListener('click', () => {
-            pause = true;
-        });
-        
-        
-        document.getElementById('my-slider').addEventListener('change', () => {
-            // Set the coordinates of the original point back to origin
-            point.features[0].geometry.coordinates = origin;
-
-            // Update the source layer
-            map.getSource('point').setData(point);
-
-            let slider = document.getElementById("my-slider").value;
-
-            // Update the counter based on slider position
-            counter = steps*slider;
-            updatePoint(counter);
-        });
-
-        // Start the animation
-        //animate(counter);
-    });
-</script>
+    </script>
 
 </body>
+
 </html>
